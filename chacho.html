@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chocolate Day Surprise 🍫</title>
+    <style>
+        :root {
+            --choco-dark: #3d1d16;
+            --choco-light: #5a2d22;
+            --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+        }
+
+        body {
+            background-color: #fce4ec;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        /* Gold Wrapper Layer */
+        #wrapper {
+            position: absolute;
+            width: 320px;
+            height: 450px;
+            background: var(--gold-gradient);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: transform 1s ease-in-out, opacity 0.8s;
+            text-align: center;
+        }
+
+        #wrapper h1 { color: #5d4037; margin: 0; font-size: 2rem; }
+        #wrapper p { color: #795548; font-weight: bold; }
+
+        /* Main Chocolate Container */
+        .container {
+            position: relative;
+            text-align: center;
+        }
+
+        .chocolate-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 70px);
+            grid-template-rows: repeat(5, 70px);
+            gap: 8px;
+            background-color: #2b140e;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        .square {
+            background: linear-gradient(145deg, var(--choco-light), var(--choco-dark));
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.4s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.15);
+        }
+
+        .square.eaten {
+            opacity: 0;
+            transform: scale(0.5) rotate(20deg);
+            pointer-events: none;
+        }
+
+        /* Floating Message */
+        #msg-popup {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #ad1457;
+            display: none;
+            white-space: nowrap;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Final Panda Screen */
+        #final-screen {
+            display: none;
+            text-align: center;
+            animation: zoomIn 0.8s ease-out;
+        }
+
+        #final-screen img {
+            width: 250px;
+            border-radius: 15px;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="wrapper" onclick="unwrap()">
+            <h1>Premium</h1>
+            <p>Love Edition</p>
+            <small style="margin-top: 20px; opacity: 0.7;">Tap to Unwrap</small>
+        </div>
+
+        <div id="game-section" style="opacity: 0;">
+            <div id="msg-popup">Delicious!</div>
+            <div class="chocolate-grid" id="grid"></div>
+        </div>
+
+        <div id="final-screen">
+            <img src="c:\Users\user\Downloads\WhatsApp Image.png.jpeg" alt="Panda Hug">
+            <h2 style="color: #5d4037;">Happy Chocolate Day!</h2>
+            <p style="color: #ad1457; font-weight: bold;">You are sweeter than any chocolate! ❤️</p>
+        </div>
+    </div>
+
+    <script>
+        const wrapper = document.getElementById('wrapper');
+        const gameSection = document.getElementById('game-section');
+        const grid = document.getElementById('grid');
+        const msgPopup = document.getElementById('msg-popup');
+        const finalScreen = document.getElementById('final-screen');
+
+        const quotes = ["Sweet! ✨", "My Sugar Rush! ⚡", "100% Pure Love!", "Yummy! 🍫", "So Sweet! 🥰"];
+        let eatenCount = 0;
+
+        // 1. Unwrap Function
+        function unwrap() {
+            wrapper.style.transform = "translateY(-100%)";
+            wrapper.style.opacity = "0";
+            setTimeout(() => {
+                wrapper.style.display = "none";
+                gameSection.style.opacity = "1";
+            }, 600);
+            
+            // Background Music Play cheyyan (user permission venam):
+            // document.getElementById('bgMusic').play();
+        }
+
+        // 2. Create Chocolate Squares
+        for (let i = 0; i < 20; i++) {
+            const square = document.createElement('div');
+            square.classList.add('square');
+            square.innerHTML = "❤";
+
+            square.addEventListener('click', () => {
+                square.classList.add('eaten');
+                eatenCount++;
+
+                // Show Quote
+                msgPopup.innerText = quotes[Math.floor(Math.random() * quotes.length)];
+                msgPopup.style.display = 'block';
+
+                if (eatenCount === 20) {
+                    setTimeout(() => {
+                        gameSection.style.display = 'none';
+                        finalScreen.style.display = 'block';
+                    }, 500);
+                }
+            });
+            grid.appendChild(square);
+        }
+    </script>
+</body>
+</html>
